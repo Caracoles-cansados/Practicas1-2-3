@@ -104,6 +104,17 @@ update_status Application::Update()
 		item = item->next;
 	}
 
+
+	double currentDt = frameTime.ReadMs();
+	if (maxFrameDuration > 0 && currentDt < maxFrameDuration) {
+		int delay = maxFrameDuration - currentDt;
+
+		PerfTimer delayTimer = PerfTimer();
+		SDL_Delay(delay);
+		LOG("We waited for %I32u ms and got back in %f ms", delay, delayTimer.ReadMs());
+	}
+
+
 	return ret;
 }
 

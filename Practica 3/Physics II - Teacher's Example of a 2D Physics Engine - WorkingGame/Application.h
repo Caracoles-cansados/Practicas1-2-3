@@ -13,6 +13,7 @@
 #include "ModulePhysics.h"
 #include "ModuleSceneIntro.h"
 #include "ModuleFonts.h"
+#include "PerfTimer.h"
 
 class Application
 {
@@ -37,6 +38,8 @@ private:
 
 
 public:
+	PerfTimer frameTime;
+	float maxFrameDuration = 16;
 
 	Application();
 	~Application();
