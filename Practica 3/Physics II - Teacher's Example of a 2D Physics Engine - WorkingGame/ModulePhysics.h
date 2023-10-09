@@ -5,6 +5,7 @@
 #include <deque>
 #include <iostream>
 #include <string>
+#include "Application.h"
 
 #define PIXELS_PER_METER (20.0f) // if touched change METER_PER_PIXEL too
 #define METER_PER_PIXEL (1.0f / PIXELS_PER_METER) // this is 1 / PIXELS_PER_METER !
@@ -13,9 +14,14 @@
 #define PIXEL_TO_METERS(p)  ((float) METER_PER_PIXEL * p)
 
 
+
+
+
+
 // Class: Ball object (a simple stoopid physics object)
 class PhysBall
 {
+#include "Application.h"
 public:
 	// Position
 	// You could also use an array/vector
@@ -81,6 +87,24 @@ public:
 };
 
 
+class PinballBox : public Ground {
+
+public:
+	Ground top;
+	Ground down;
+	Ground left;
+	Ground rigth;
+
+	float x, y, w, h;
+
+	PinballBox();
+
+	bool UpdateCollisions();
+	//bool Draw();
+
+};
+
+
 
 class ModulePhysics : public Module
 {
@@ -99,6 +123,7 @@ public:
 	Ground ground{};
 	Ground box{};
 	Water water{};
+	PinballBox pinballBox;
 
 	// Misc
 	float dt = 1.0 / 60.0;
@@ -111,6 +136,10 @@ private:
 	bool atocao = false;
 
 };
+
+
+
+
 
 // Compute modulus of a vector
 float modulus(float vx, float vy);
@@ -129,6 +158,9 @@ void integrator_velocity_verlet(PhysBall& ball, float dt);
 
 // Detect collision with ground
 bool is_colliding_with_ground(const PhysBall& ball, const Ground& ground);
+
+// Detect collision with box
+bool is_colliding_with_pinballBox(const PhysBall& ball, const PinballBox& pinballBox);
 
 // Detect collision with water
 bool is_colliding_with_water(const PhysBall& ball, const Water& water);

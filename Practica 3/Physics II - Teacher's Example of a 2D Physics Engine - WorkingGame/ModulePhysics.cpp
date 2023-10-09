@@ -78,6 +78,14 @@ bool ModulePhysics::Start()
 	// Add ball to the collection
 	//balls.emplace_back(ball);
 
+	pinballBox = PinballBox();
+	pinballBox.x = 20;
+	pinballBox.y = 10;
+	pinballBox.w = 5;
+	pinballBox.h = 5;
+	
+	pinballBox.UpdateCollisions();
+
 
 
 	App->font->AddFonts();
@@ -261,9 +269,12 @@ update_status ModulePhysics::PostUpdate()
 	// Draw ground
 	color_r = 0; color_g = 255; color_b = 0;
 	App->renderer->DrawQuad(ground.pixels(), color_r, color_g, color_b);
+	
 	color_r = 255; color_g = 120; color_b = 120;
 	SDL_SetRenderDrawColor(App->renderer->renderer,color_r, color_g, color_b, 255);
 	SDL_RenderDrawLine(App->renderer->renderer, 42.0f,420, (potencia*5 * cos(angulo)) + 42, (potencia*5 * sin(angulo)) + 420);
+
+
 
 	
 
@@ -280,6 +291,18 @@ update_status ModulePhysics::PostUpdate()
 	}
 	//App->renderer->DrawQuad({ 850, 628, 40, 40 }, color_r, color_g, color_b);
 	App->renderer->DrawQuad(box.pixels(), color_r, color_g, color_b);
+
+
+
+	//DRAW PINBALL BOX
+	pinballBox.UpdateCollisions();
+
+	
+	App->renderer->DrawQuad(pinballBox.left.pixels(), 255, 255, 0);
+	App->renderer->DrawQuad(pinballBox.down.pixels(), 255, 255, 255);
+	App->renderer->DrawQuad(pinballBox.rigth.pixels(), 255, 255, 0);
+	App->renderer->DrawQuad(pinballBox.top.pixels(), 255, 255, 255);
+	
 
 	// Draw all balls in the scenario
 	for (auto& ball : balls)
@@ -419,5 +442,121 @@ SDL_Rect Ground::pixels()
 void mostrarTextos() {
 	
 }
+
+/*class PinballBox : public Ground {
+	
+public:
+	Ground top;
+	Ground down;
+	Ground left;
+	Ground rigth;
+
+	float x, y, w, h;
+
+	PinballBox(float x, float y, float w, float h);
+
+	bool UpdateCollisions();
+	bool DrawColor();
+
+};*/
+
+PinballBox::PinballBox() {
+	top = Ground();
+	down = Ground();
+	left = Ground();
+	rigth = Ground();
+	x = 0;
+	y = 0;
+	h = 10;
+	w = 10;
+
+	/*	ground = Ground();
+	ground.x = 0.0f; // [m]
+	ground.y = 0.0f; // [m]
+	ground.w = 30.0f; // [m]
+	ground.h = 15.0f; // [m]*/
+	/*this->x = x;
+	this->y = y;
+	this->w = w;
+	this->h = h;
+
+	top = Ground();
+	top.x = x;
+	top.y = y - h/2 + h*0.05f;
+	top.w = w;
+	top.h = h * 0.1f;
+
+
+	down = Ground();
+	down.x = x;
+	down.y = y + h / 2 - h * 0.05f;
+	down.w = w;
+	down.h = h * 0.1f;
+
+
+	left = Ground();
+	left.x = x - w / 3;
+	left.y = y;
+	left.w = w / 2;
+	left.h = h * 0.8f;
+
+	rigth = Ground();
+	rigth.x = x + w / 3;
+	rigth.y = y;
+	rigth.w = w / 2;
+	rigth.h = h * 0.8f;*/
+
+}
+
+
+
+bool PinballBox::UpdateCollisions() {
+	
+
+	
+	top.x = x - w/4;
+	top.y = y + h - h*0.2f;
+	top.w = w;
+	top.h = h * 0.1f;
+
+
+
+
+	
+	down.x = x - w / 4;
+	down.y = y- h*0.1f;
+	down.w = w;
+	down.h = h * 0.1f;
+
+
+	
+	left.x = x - w / 4;
+	left.y = y;
+	left.w = w / 2 ;
+	left.h = h * 0.8f;
+
+	
+	rigth.x = x + w / 4;
+	rigth.y = y;
+	rigth.w = w / 2;
+	rigth.h = h * 0.8f;
+
+	
+
+	return true;
+}
+
+//bool PinballBox::Draw() {
+//	
+//
+//	return false;
+//	
+//
+//
+//
+//}
+
+
+
 
 
