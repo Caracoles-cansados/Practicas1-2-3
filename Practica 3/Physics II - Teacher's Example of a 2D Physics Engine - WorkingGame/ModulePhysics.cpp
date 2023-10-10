@@ -80,7 +80,7 @@ bool ModulePhysics::Start()
 
 	pinballBox = PinballBox();
 	pinballBox.x = 20;
-	pinballBox.y = 10;
+	pinballBox.y = 30;
 	pinballBox.w = 5;
 	pinballBox.h = 5;
 	
@@ -243,6 +243,40 @@ update_status ModulePhysics::PreUpdate()
 			ball.vy *= ball.coef_restitution;
 		}
 
+		if (int orientacion = is_colliding_with_pinballBox(ball, pinballBox)) {
+
+			switch (orientacion)	
+			{
+				case 1: 
+					//ball.x = pinballBox.top.y + pinballBox.top.h + ball.radius;
+					ball.vy = -ball.vy;
+					
+					break;
+				case 2: 
+					//ball.x = pinballBox.rigth.y + pinballBox.rigth.h + ball.radius;
+					ball.vx = -ball.vy;
+					
+					break;
+				case 3: 
+					//ball.y = pinballBox.down.x + pinballBox.down.h + ball.radius;
+					ball.vy  = -ball.vy;
+					break;
+				case 4: 
+					//ball.x = pinballBox.left.y - pinballBox.left.h - ball.radius;
+					ball.vx = -ball.vx;
+					break;
+
+			default:
+				break;
+			}
+
+			ball.vx *= ball.coef_friction;
+			ball.vy *= ball.coef_restitution;
+
+
+		}
+
+
 	}
 
 	// Continue game
@@ -297,11 +331,11 @@ update_status ModulePhysics::PostUpdate()
 	//DRAW PINBALL BOX
 	pinballBox.UpdateCollisions();
 
-	
+	App->renderer->DrawQuad(pinballBox.top.pixels(), 136, 208, 37);
 	App->renderer->DrawQuad(pinballBox.left.pixels(), 255, 255, 0);
 	App->renderer->DrawQuad(pinballBox.down.pixels(), 255, 255, 255);
-	App->renderer->DrawQuad(pinballBox.rigth.pixels(), 255, 255, 0);
-	App->renderer->DrawQuad(pinballBox.top.pixels(), 255, 255, 255);
+	App->renderer->DrawQuad(pinballBox.rigth.pixels(), 8, 222, 166);
+	
 	
 
 	// Draw all balls in the scenario
@@ -438,6 +472,42 @@ SDL_Rect Ground::pixels()
 	pos_px.h = METERS_TO_PIXELS(-h); // Can I do this? LOL
 	return pos_px;
 }
+
+
+// Detect collision with ground
+int is_colliding_with_pinballBox(const PhysBall& ball, const PinballBox& pinballbox)
+{
+	int ret = 0;
+
+	float rect_x;
+	float rect_y;
+	// 1 -> arriba,  2 -> derecha,  3 -> abajo,  4 -> izquierda 
+
+	rect_x = (pinballbox.top.x + pinballbox.top.w / 2.0f); // Center of rectangle
+	rect_y = (pinballbox.top.y + pinballbox.top.h / 2.0f); // Center of rectangle
+	
+	if (is_colliding_with_ground(ball, pinballbox.top)) {
+		ret = 1;
+	}
+
+	if (is_colliding_with_ground(ball, pinballbox.rigth)) {
+		ret = 2;
+	}
+
+	if (is_colliding_with_ground(ball, pinballbox.down)) {
+		ret = 3;
+	}
+
+	if (is_colliding_with_ground(ball, pinballbox.left)) {
+		ret = 4;
+	}
+	
+
+
+
+	return ret;
+}
+
 
 void mostrarTextos() {
 	

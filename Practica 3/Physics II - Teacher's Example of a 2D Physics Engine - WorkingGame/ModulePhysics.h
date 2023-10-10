@@ -160,7 +160,7 @@ void integrator_velocity_verlet(PhysBall& ball, float dt);
 bool is_colliding_with_ground(const PhysBall& ball, const Ground& ground);
 
 // Detect collision with box
-bool is_colliding_with_pinballBox(const PhysBall& ball, const PinballBox& pinballBox);
+int is_colliding_with_pinballBox(const PhysBall& ball, const PinballBox& pinballBox);
 
 // Detect collision with water
 bool is_colliding_with_water(const PhysBall& ball, const Water& water);
