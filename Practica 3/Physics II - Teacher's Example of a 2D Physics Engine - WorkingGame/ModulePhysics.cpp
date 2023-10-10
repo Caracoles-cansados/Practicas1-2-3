@@ -36,7 +36,7 @@ bool ModulePhysics::Start()
 	box.x = 43.0f; // [m]
 	box.y = 3.0f; // [m]
 	box.w = 4.0f; // [m]
-	box.h = 4.0f; // [m]
+	box.h = 400.0f; // [m]
 
 	
 
@@ -85,6 +85,15 @@ bool ModulePhysics::Start()
 	pinballBox.h = 5;
 	
 	pinballBox.UpdateCollisions();
+
+
+	pinballBox2 = PinballBox();
+	pinballBox2.x = 30;
+	pinballBox2.y = 0;
+	pinballBox2.w = 5;
+	pinballBox2.h = 500;
+
+	pinballBox2.UpdateCollisions();
 
 
 
@@ -247,24 +256,51 @@ update_status ModulePhysics::PreUpdate()
 
 			switch (orientacion)	
 			{
-				case 1: 
+				case 1:
+				case 3:
 					//ball.x = pinballBox.top.y + pinballBox.top.h + ball.radius;
 					ball.vy = -ball.vy;
 					
 					break;
 				case 2: 
+				case 4: 
 					//ball.x = pinballBox.rigth.y + pinballBox.rigth.h + ball.radius;
-					ball.vx = -ball.vy;
+					ball.vx = -ball.vx;
 					
 					break;
-				case 3: 
-					//ball.y = pinballBox.down.x + pinballBox.down.h + ball.radius;
-					ball.vy  = -ball.vy;
-					break;
-				case 4: 
-					//ball.x = pinballBox.left.y - pinballBox.left.h - ball.radius;
-					ball.vx = -ball.vx;
-					break;
+
+			default:
+				break;
+			}
+
+			ball.vx *= ball.coef_friction;
+			ball.vy *= ball.coef_restitution;
+
+
+		}
+
+		if (int orientacion = is_colliding_with_pinballBox(ball, pinballBox2)) {
+
+			switch (orientacion)
+			{
+			case 1:
+				//ball.x = pinballBox.top.y + pinballBox.top.h + ball.radius;
+				ball.vy = -ball.vy;
+
+				break;
+			case 2:
+				//ball.x = pinballBox.rigth.y + pinballBox.rigth.h + ball.radius;
+				ball.vx = -ball.vy;
+
+				break;
+			case 3:
+				//ball.y = pinballBox.down.x + pinballBox.down.h + ball.radius;
+				ball.vy = -ball.vy;
+				break;
+			case 4:
+				//ball.x = pinballBox.left.y - pinballBox.left.h - ball.radius;
+				ball.vx = -ball.vx;
+				break;
 
 			default:
 				break;
@@ -335,6 +371,14 @@ update_status ModulePhysics::PostUpdate()
 	App->renderer->DrawQuad(pinballBox.left.pixels(), 255, 255, 0);
 	App->renderer->DrawQuad(pinballBox.down.pixels(), 255, 255, 255);
 	App->renderer->DrawQuad(pinballBox.rigth.pixels(), 8, 222, 166);
+
+
+	pinballBox2.UpdateCollisions();
+
+	App->renderer->DrawQuad(pinballBox2.top.pixels(), 136, 208, 37);
+	App->renderer->DrawQuad(pinballBox2.left.pixels(), 255, 255, 0);
+	App->renderer->DrawQuad(pinballBox2.down.pixels(), 255, 255, 255);
+	App->renderer->DrawQuad(pinballBox2.rigth.pixels(), 8, 222, 166);
 	
 	
 
@@ -478,13 +522,9 @@ SDL_Rect Ground::pixels()
 int is_colliding_with_pinballBox(const PhysBall& ball, const PinballBox& pinballbox)
 {
 	int ret = 0;
-
-	float rect_x;
-	float rect_y;
 	// 1 -> arriba,  2 -> derecha,  3 -> abajo,  4 -> izquierda 
 
-	rect_x = (pinballbox.top.x + pinballbox.top.w / 2.0f); // Center of rectangle
-	rect_y = (pinballbox.top.y + pinballbox.top.h / 2.0f); // Center of rectangle
+
 	
 	if (is_colliding_with_ground(ball, pinballbox.top)) {
 		ret = 1;

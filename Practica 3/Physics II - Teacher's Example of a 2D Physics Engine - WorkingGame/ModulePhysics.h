@@ -124,6 +124,7 @@ public:
 	Ground box{};
 	Water water{};
 	PinballBox pinballBox;
+	PinballBox pinballBox2;
 
 	// Misc
 	float dt = 1.0 / 60.0;
