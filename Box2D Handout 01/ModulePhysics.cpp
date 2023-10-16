@@ -13,6 +13,13 @@
 	#pragma comment(lib, "Box2D/libx86/Release/Box2D.lib")
 #endif
 
+#define GRAVITY_X 0.0f
+#define GRAVITY_Y -7.0f
+
+
+class b2World;
+class b2Body;
+b2World* world;
 
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -33,17 +40,13 @@ bool ModulePhysics::Start()
 	// - You need init the world in the constructor
 	// - Remember to destroy the world after using it
 
-		//#define GRAVITY_X 0.0f
-		//#define GRAVITY_Y -7.0f
+	
 
-		//	class b2World;
-		//	class b2Body;
-		//	b2World* world;
 
-		//	world = NULL;
-		//	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+	world = NULL;
+	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
-		//	delete world;
+	delete world;
 
 
 
