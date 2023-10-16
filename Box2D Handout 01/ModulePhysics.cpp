@@ -54,7 +54,7 @@ bool ModulePhysics::Start()
 	world = NULL;
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 
-	delete world;
+	
 
 
 
@@ -135,6 +135,7 @@ bool ModulePhysics::CleanUp()
 	LOG("Destroying physics world");
 
 	// Delete the whole physics world!
+	delete world;
 
 	return true;
 }
