@@ -108,7 +108,7 @@ update_status ModulePhysics::PostUpdate()
 	{
 		// TODO 3: Create a chain shape using those vertices
 		// remember to convert them from pixels to meters!
-		/*
+		
 		int points[24] = {
 			-38, 80,
 			-44, -54,
@@ -123,7 +123,35 @@ update_status ModulePhysics::PostUpdate()
 			-25, 13,
 			-9, 72
 		};
-		*/
+		
+
+		b2BodyDef body;
+		body.type = b2_dynamicBody;
+		float radius = PIXEL_TO_METERS(25);
+		body.position.Set(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
+
+		b2Body* b = world->CreateBody(&body);
+
+		b2ChainShape shape;
+		b2Vec2* p = new b2Vec2[24];
+
+		for (int i = 0; i < 24; i++)
+		{
+			if (i == 0) {
+				p[i].x = PIXEL_TO_METERS(points[i]);
+				continue;
+			}
+			p[i].y = PIXEL_TO_METERS(points[i]);
+			p[i].x = PIXEL_TO_METERS(points[i]);
+		}
+		shape.CreateLoop(p, 12);
+		b2FixtureDef fixture;
+		fixture.shape = &shape;
+		fixture.density = 1.0f;
+		b->CreateFixture(&fixture);
+
+
+
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
