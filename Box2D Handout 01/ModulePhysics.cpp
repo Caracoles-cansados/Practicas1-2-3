@@ -33,6 +33,19 @@ bool ModulePhysics::Start()
 	// - You need init the world in the constructor
 	// - Remember to destroy the world after using it
 
+		//#define GRAVITY_X 0.0f
+		//#define GRAVITY_Y -7.0f
+
+		//	class b2World;
+		//	class b2Body;
+		//	b2World* world;
+
+		//	world = NULL;
+		//	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+
+		//	delete world;
+
+
 
 	// TODO 4: Create a a big static circle as "ground"
 	return true;
