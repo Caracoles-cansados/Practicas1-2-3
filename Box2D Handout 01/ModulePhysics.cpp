@@ -5,6 +5,15 @@
 
 // TODO 1: Include Box 2 header and library
 #include "Box2D/Box2D.h"
+
+
+#ifdef _DEBUG
+	#pragma comment(lib, "Box2D/libx86/Debug/Box2D.lib")
+#else
+	#pragma comment(lib, "Box2D/libx86/Release/Box2D.lib")
+#endif
+
+
 ModulePhysics::ModulePhysics(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
 	debug = true;
