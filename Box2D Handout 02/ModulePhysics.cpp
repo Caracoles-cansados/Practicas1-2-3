@@ -83,8 +83,25 @@ update_status ModulePhysics::PostUpdate()
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
 	{
 		// TODO 1: When pressing 2, create a box on the mouse position
+		b2BodyDef body;
+		body.type = b2_dynamicBody;
+		float radius = PIXEL_TO_METERS(25);
+		body.position.Set(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
+
+		b2Body* b = world->CreateBody(&body);
+
+		b2PolygonShape shape;
+		shape.SetAsBox(radius, radius);
+
+		
+		b2FixtureDef fixture;
+		fixture.shape = &shape;
+		
 
 		// TODO 2: To have the box behave normally, set fixture's density to 1.0f
+		fixture.density = 1.0f;
+
+		b->CreateFixture(&fixture);
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_3) == KEY_DOWN)
