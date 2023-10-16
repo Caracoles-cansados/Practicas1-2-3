@@ -97,6 +97,27 @@ update_status ModulePhysics::PostUpdate()
 	// TODO 5: On space bar press, create a circle on mouse position
 	// - You need to transform the position / radius
 
+	if (App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
+	{
+
+		b2BodyDef body;
+		body.type = b2_dynamicBody;
+		float radius = PIXEL_TO_METERS(25);
+		body.position.Set(PIXEL_TO_METERS(App->input->GetMouseX()), PIXEL_TO_METERS(App->input->GetMouseY()));
+
+		b2Body* b = world->CreateBody(&body);
+
+		b2CircleShape shape;
+		shape.m_radius = radius;
+		b2FixtureDef fixture;
+		fixture.shape = &shape;
+
+		b->CreateFixture(&fixture);
+
+	}
+
+
+
 	if(App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
