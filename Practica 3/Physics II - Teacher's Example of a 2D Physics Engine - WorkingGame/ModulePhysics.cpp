@@ -254,20 +254,26 @@ update_status ModulePhysics::PreUpdate()
 
 		if (int orientacion = is_colliding_with_pinballBox(ball, pinballBox)) {
 
-			switch (orientacion)	
+			switch (orientacion)
 			{
-				case 1:
-				case 3:
-					//ball.x = pinballBox.top.y + pinballBox.top.h + ball.radius;
-					ball.vy = -ball.vy;
-					
-					break;
-				case 2: 
-				case 4: 
-					//ball.x = pinballBox.rigth.y + pinballBox.rigth.h + ball.radius;
-					ball.vx = -ball.vx;
-					
-					break;
+			case 1:
+				ball.y = pinballBox.top.y + pinballBox.top.h + ball.radius;
+				ball.vy = -ball.vy;
+
+				break;
+			case 2:
+				ball.x = pinballBox.rigth.x + pinballBox.rigth.w + ball.radius;
+				ball.vx = -ball.vx;
+
+				break;
+			case 3:
+				ball.y = pinballBox.down.y - pinballBox.down.h - ball.radius;
+				ball.vy = -ball.vy;
+				break;
+			case 4:
+				ball.x = pinballBox.left.x - ball.radius;
+				ball.vx = -ball.vx;
+				break;
 
 			default:
 				break;
@@ -284,21 +290,22 @@ update_status ModulePhysics::PreUpdate()
 			switch (orientacion)
 			{
 			case 1:
-				//ball.x = pinballBox.top.y + pinballBox.top.h + ball.radius;
+				ball.y = pinballBox2.top.y + pinballBox2.top.h + ball.radius;
 				ball.vy = -ball.vy;
 
 				break;
 			case 2:
-				//ball.x = pinballBox.rigth.y + pinballBox.rigth.h + ball.radius;
-				ball.vx = -ball.vy;
+				ball.x = pinballBox2.rigth.x + pinballBox2.rigth.w + ball.radius;
+				ball.vx = -ball.vx;
 
 				break;
 			case 3:
-				//ball.y = pinballBox.down.x + pinballBox.down.h + ball.radius;
+				ball.y = pinballBox2.down.y - pinballBox2.down.h - ball.radius;
 				ball.vy = -ball.vy;
 				break;
 			case 4:
-				//ball.x = pinballBox.left.y - pinballBox.left.h - ball.radius;
+				//ball.x = pinballBox.left.x - pinballBox.left.w - ball.radius;
+				ball.x = pinballBox2.left.x - pinballBox2.left.w - ball.radius;
 				ball.vx = -ball.vx;
 				break;
 
