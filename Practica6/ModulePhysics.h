@@ -53,7 +53,7 @@ public:
 	b2Body* planet;
 
 	//double G = 6.67191 * pow(10, -11);
-	double G = 0;
+	double G = 5;
 
 private:
 

@@ -33,7 +33,19 @@ bool ModuleSceneIntro::Start()
 	circles.add(App->physics->CreateCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT/2, 200));
 	circles.getLast()->data->listener = this;
 	circles.getLast()->data->body->SetGravityScale(0);
-	circles.getLast()->data->body->GetFixtureList()->SetDensity(10000000000000);
+	//circles.getLast()->data->body->SetType(b2_kinematicBody);
+	circles.getLast()->data->body->GetFixtureList()->SetDensity(10000000000);
+
+
+	
+	/*mainPlanet = App->physics->CreateCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 200);
+	mainPlanet->listener = this;
+	mainPlanet->body->SetGravityScale(0);
+	mainPlanet->body->SetType(b2_staticBody);*/
+
+	mainPlanet_transform = iPoint(circles.getLast()->data->body->GetTransform().p.x, circles.getLast()->data->body->GetTransform().p.y);
+
+
 	return ret;
 }
 
@@ -55,7 +67,7 @@ update_status ModuleSceneIntro::Update()
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
 		circles.getLast()->data->listener = this;
 		circles.getLast()->data->body->SetGravityScale(0);
-		circles.getLast()->data->body->GetFixtureList()->SetDensity(10);
+		circles.getLast()->data->body->GetFixtureList()->SetDensity(1);
 	}
 
 	
@@ -63,29 +75,63 @@ update_status ModuleSceneIntro::Update()
 
 	for (int i = 0; i < circles.count(); i++) {
 
+		PhysBody* circleA;
+		circles.at(i, circleA);
+
+		b2Body* bodyA = circleA->body;
+		b2Vec2 pivoteA = bodyA->GetWorldCenter();
+		float masaA = bodyA->GetMass();
+
+		if (circles.count() > 1) {
+
+			for (int j = i+1; j < circles.count(); j++) {
+
+				PhysBody* circleB;
+				circles.at(j, circleB);
+
+				b2Body* bodyB = circleB->body;
+				b2Vec2 pivoteB = bodyB->GetWorldCenter();
+				float masaB = bodyB->GetMass();
+				b2Vec2 delta = pivoteB - pivoteA;
+				float r = delta.Length();
+				float force = App->physics->G * masaA * masaB / (r * r);
+				
+				delta.Normalize();
+				//force = 10;
+				bodyA->ApplyForce(force * delta, pivoteA, true);
+				bodyB->ApplyForce(-force * delta, pivoteB, true);
+				
+
+			}
+		}
+	}
+
+
+	PhysBody* circlePlaneta;
+	circles.at(0, circlePlaneta);
+	circlePlaneta->body->SetTransform(b2Vec2(mainPlanet_transform.x, mainPlanet_transform.y), 0);
+
+	/*for (int i = 0; i < circles.count(); i++) {
 		PhysBody* circle;
 		circles.at(i, circle);
 
-		b2Body* bi = circle->body;
-		b2Vec2 pi = bi->GetWorldCenter();
-		float mi = bi->GetMass();
-		for (int k = i+1; k < circles.count(); k++) {
+		b2Body* planeta = mainPlanet->body;
+		b2Vec2 pivotPlaneta = planeta->GetWorldCenter();
+		float masaPlaneta = planeta->GetMass();
 
-			PhysBody* circleK;
-			circles.at(k, circleK);
+		b2Body* luna = circle->body;
+		b2Vec2 pivotLuna = luna->GetWorldCenter();
+		float masaLuna = luna->GetMass();
 
-			b2Body* bk = circleK->body;
-			b2Vec2 pk = bk->GetWorldCenter();
-			float mk = bk->GetMass();
-			b2Vec2 delta = pk - pi;
-			float r = delta.Length();
-			float force = App->physics->G * mi * mk / (r * r);
-			delta.Normalize();
-			force = 10;
-			bi->ApplyForce(force * delta, pi, true);
-			bk->ApplyForce(-force * delta, pk, true);
-		}
-	}
+		b2Vec2 dist = pivotLuna - pivotPlaneta;
+		float r = dist.Length();
+		float force = App->physics->G * masaPlaneta * masaLuna / (r * r);
+		force = 10;
+		dist.Normalize();
+		planeta->ApplyForce(force * dist, pivotPlaneta, true);
+		luna->ApplyForce(-force * dist, pivotLuna, true);
+	}*/
+
 
 
 
