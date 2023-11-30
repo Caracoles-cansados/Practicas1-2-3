@@ -24,6 +24,7 @@ public:
 
 	PhysBody* sensor;
 	bool sensed;
+	bool test = true;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;

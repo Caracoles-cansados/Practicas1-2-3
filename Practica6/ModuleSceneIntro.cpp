@@ -35,9 +35,12 @@ bool ModuleSceneIntro::Start()
 	circles.getLast()->data->body->SetGravityScale(0);
 	//circles.getLast()->data->body->SetType(b2_kinematicBody);
 	circles.getLast()->data->body->GetFixtureList()->SetDensity(10000000000);
-
+	
 
 	
+
+	/**/
+
 	/*mainPlanet = App->physics->CreateCircle(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 200);
 	mainPlanet->listener = this;
 	mainPlanet->body->SetGravityScale(0);
@@ -61,6 +64,27 @@ bool ModuleSceneIntro::CleanUp()
 update_status ModuleSceneIntro::Update()
 {
 	
+	if (test) {
+		circles.add(App->physics->CreateCircle(SCREEN_WIDTH / 1.2f, SCREEN_HEIGHT / 2, 25));
+		circles.getLast()->data->listener = this;
+		circles.getLast()->data->body->SetGravityScale(0);
+		circles.getLast()->data->body->GetFixtureList()->SetDensity(1);
+		circles.getLast()->data->body->ApplyForce(b2Vec2(0, 300), circles.getLast()->data->body->GetWorldCenter(), true);
+
+
+
+		circles.add(App->physics->CreateCircle(SCREEN_WIDTH / 1.2f + 35, SCREEN_HEIGHT / 2, 3));
+		circles.getLast()->data->listener = this;
+		circles.getLast()->data->body->SetGravityScale(0);
+		circles.getLast()->data->body->GetFixtureList()->SetDensity(1);
+		circles.getLast()->data->body->ApplyForce(b2Vec2(0.2f, 2.6f), circles.getLast()->data->body->GetWorldCenter(), true);
+		
+
+
+		test = false;
+	}
+
+
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
